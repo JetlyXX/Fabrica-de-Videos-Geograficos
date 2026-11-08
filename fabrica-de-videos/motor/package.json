@@ -1,0 +1,27 @@
+{
+  "name": "fabrica-de-videos",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "web": "node herramientas/construir.mjs"
+  },
+  "dependencies": {
+    "@fontsource/playfair-display": "^5.3.0",
+    "@fontsource/poppins": "^5.3.0",
+    "@remotion/bundler": "4.0.300",
+    "@remotion/cli": "4.0.300",
+    "@remotion/player": "4.0.300",
+    "@remotion/renderer": "4.0.300",
+    "@types/leaflet": "^1.9.12",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "esbuild": "^0.25.0",
+    "flag-icons": "^7.2.3",
+    "leaflet": "^1.9.4",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "remotion": "4.0.300",
+    "typescript": "^5.5.4"
+  }
+}

@@ -1,0 +1,99 @@
+FÁBRICA DE VIDEOS - LÉEME PRIMERO
+=================================
+
+Con esto haces videos verticales de mapas (para Shorts, TikTok o Reels) sobre el tema que quieras.
+Tú pones la idea y la voz. Claude comprueba los datos, escribe el guion y monta el video.
+Funciona en tu ordenador. No hace falta ningún tutorial: sigue estos pasos.
+
+
+1. ANTES DE EMPEZAR
+-------------------
+Necesitas tener instalado:
+- Claude Code o la app de escritorio de Claude (pestaña Code), con tu propia cuenta de Claude.
+- Python 3.10 o superior: https://www.python.org/downloads/
+  En Windows, al instalarlo, marca la casilla «Add python.exe to PATH».
+- Node.js 18 o superior: https://nodejs.org/
+- Internet y unos 3 GB libres en el disco.
+
+
+2. INSTALAR (solo una vez)
+--------------------------
+Descomprime el ZIP y haz doble clic en:
+- Windows: «Instalar (Windows).cmd». Si sale un aviso azul: «Más información» y «Ejecutar de todas formas».
+- Mac: «Instalar (Mac).command». Si lo bloquea: Ajustes del Sistema > Privacidad y seguridad > «Abrir igualmente».
+
+Escribe s y pulsa Enter. Ya está.
+
+
+3. HACER TU PRIMER VIDEO
+------------------------
+a) Abre una sesión NUEVA de Claude y escribe:
+
+       VIDEO NUEVO
+
+b) Si Claude te pide permiso, pulsa «Permitir».
+   La primera vez instala el motor: tarda unos minutos y descarga cerca de 1 GB.
+
+c) Se abre la fábrica en tu navegador. Elige un estilo y cómo poner la voz:
+   - Ya tengo mi audio: lo subes y el video sigue tu voz.
+   - Escríbeme el guion: Claude lo escribe, tú lo grabas y lo subes en la misma página.
+   - Voz automática: para pruebas rápidas.
+
+d) Escribe tu idea, por ejemplo: «¿Por qué Bolivia no tiene mar?»
+
+e) Pulsa «Crear mi video» y espera. Ves el avance en la página y tu video aparece ahí al terminar.
+   Un video de un minuto suele tardar unos minutos.
+
+Tu video queda en: FabricaDeVideos / Videos listos, dentro de tu carpeta personal.
+A su lado hay un .txt con el título, la descripción y los créditos.
+
+
+4. ANTES DE PUBLICAR
+--------------------
+- Mira el video entero y revisa los datos. Claude puede equivocarse y la responsabilidad es tuya.
+- Copia los créditos del .txt en la descripción: el mapa de satélite los exige.
+- Usa solo música sobre la que tengas permiso.
+
+
+5. COSAS QUE PUEDES PEDIRLE A CLAUDE
+------------------------------------
+- «VIDEO NUEVO»: empezar un video.
+- «Abre la fábrica»: ver tus videos y montar o retocar a mano.
+- «Cambia el texto de la escena del segundo 20»: retocar un video hecho.
+- «Hazlo con este audio» y la ruta del archivo: montar un video sobre un audio.
+- «Apaga la fábrica»: cerrarla cuando termines.
+
+Estilos: Historia de un lugar, Comparar tamaños, Fronteras curiosas, Rutas y viajes y Tema libre.
+
+
+6. SI ALGO FALLA
+----------------
+- «python no se reconoce»: instala Python y marca «Add python.exe to PATH». Reinicia Claude.
+- «Falta Node.js»: instala Node.js y reinicia Claude.
+- Claude no reacciona a VIDEO NUEVO: abre una sesión nueva o escribe /fabrica-de-videos.
+- La página no se abre: pídele a Claude «abre la fábrica» y entra en la dirección que te dé.
+- El mapa sale borroso: pídele que aleje un poco la cámara. El satélite no da para mucho zoom.
+- Otro fallo: copia el mensaje de error en el chat y pídele a Claude que lo arregle.
+
+
+7. PRIVACIDAD Y LICENCIAS
+-------------------------
+La fábrica solo se abre en tu ordenador y tu voz se transcribe ahí mismo. Salen a internet:
+- Las peticiones de mapas (EOX) y los lugares que busques (Nominatim, OpenStreetMap).
+- El guion, solo si usas la voz automática (servicio de Microsoft, a través de edge-tts).
+- Lo que trabajes con Claude, según las condiciones de tu cuenta.
+
+- La voz automática usa edge-tts: es gratis y sin cuenta, pero no es un producto oficial de Microsoft.
+  Podría dejar de funcionar o no servir para uso comercial. Para monetizar, usa tu propia voz.
+- El motor de video es Remotion: las empresas de cierto tamaño necesitan su licencia.
+  Consulta: https://www.remotion.dev/license
+- Se descargan al instalar y mantienen sus licencias: Remotion, React, Leaflet, esbuild, faster-whisper
+  (modelo Whisper), edge-tts, imageio-ffmpeg, Poppins y Playfair Display (SIL OFL), flag-icons (MIT),
+  Natural Earth (dominio público) y Sentinel-2 cloudless de EOX (CC BY 4.0).
+
+
+8. DESINSTALAR
+--------------
+Borra estas dos carpetas de tu carpeta personal. La primera contiene tus videos y proyectos:
+- FabricaDeVideos
+- .claude/skills/fabrica-de-videos

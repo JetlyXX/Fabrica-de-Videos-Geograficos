@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Video nuevo · Fábrica de Videos</title>
+<link rel="stylesheet" href="/web/dist/app.css">
+<style>
+  body { background: var(--tinta); }
+  .pagina { max-width: 900px; margin: 0 auto; padding: 34px 22px 60px; }
+  .pagina > header { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 22px; }
+  .pagina h1 { font-size: 44px; line-height: 1.05; }
+  .conexion { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--suave); white-space: nowrap; }
+  .conexion i { width: 10px; height: 10px; border-radius: 50%; background: #66707f; }
+  .conexion.on { color: #8fe3ae; } .conexion.on i { background: #38c172; box-shadow: 0 0 8px #38c172; }
+  h2 { font-size: 21px; margin: 26px 0 10px; }
+  .estilos { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; }
+  .estilo { position: relative; height: 150px; border-radius: 12px; overflow: hidden; text-align: left; background: center/cover; border: 3px solid transparent; }
+  .estilo::before { content: ""; position: absolute; inset: 0; background: linear-gradient(transparent 15%, rgba(5,9,15,.92)); }
+  .estilo span { position: absolute; left: 11px; right: 11px; bottom: 9px; }
+  .estilo b { display: block; font-size: 15px; line-height: 1.2; margin-bottom: 3px; }
+  .estilo small { font-size: 11.5px; line-height: 1.3; color: #d7dde6; display: block; }
+  .estilo.on { border-color: var(--oro); }
+  .modos { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 10px; }
+  .modo { background: var(--panel); border: 2px solid var(--linea); border-radius: 12px; padding: 13px 14px; text-align: left; }
+  .modo b { display: block; font-size: 15px; margin-bottom: 3px; }
+  .modo small { color: var(--suave); font-size: 12px; line-height: 1.35; display: block; }
+  .modo.on { border-color: var(--oro); background: var(--panel2); }
+  .turno { background: var(--panel); border: 2px solid var(--oro); border-radius: 14px; padding: 18px; margin-bottom: 8px; }
+  .opciones { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; }
+  textarea#idea { font-size: 16px; min-height: 110px; }
+  .enviar { width: 100%; margin-top: 18px; padding: 15px; font-size: 18px; }
+  .pasos { list-style: none; padding: 0; margin: 20px 0; }
+  .pasos li { padding: 9px 0 9px 32px; position: relative; color: var(--suave); }
+  .pasos li::before { content: ""; position: absolute; left: 4px; top: 13px; width: 13px; height: 13px; border-radius: 50%; border: 2px solid var(--linea); }
+  .pasos li.hecho { color: var(--texto); } .pasos li.hecho::before { background: #38c172; border-color: #38c172; }
+  .pasos li.ahora { color: var(--oro); font-weight: 700; } .pasos li.ahora::before { border-color: var(--oro); animation: latido 1s infinite alternate; }
+  @keyframes latido { to { background: var(--oro); } }
+  video { width: min(340px, 100%); aspect-ratio: 9/16; background: #000; border-radius: 14px; display: block; margin: 12px 0; }
+  .nota { background: var(--panel); border: 1px solid var(--linea); border-radius: 10px; padding: 13px 15px; line-height: 1.5; margin-top: 14px; }
+  @media (prefers-reduced-motion: reduce) { .pasos li.ahora::before { animation: none; background: var(--oro); } }
+</style>
+</head>
+<body>
+<div class="pagina">
+  <header>
+    <h1>Video nuevo</h1>
+    <span class="fila"><a class="btn" href="/" style="text-decoration:none">Mis videos y editor</a><span class="conexion" id="conexion"><i></i><span id="textoConexion">Comprobando…</span></span></span>
+  </header>
+
+  <form id="formulario">
+    <h2 style="margin-top:0">¿Qué estilo quieres?</h2>
+    <div class="estilos" id="estilos"></div>
+
+    <h2>¿Cómo ponemos tu voz?</h2>
+    <div class="modos" id="modos" role="radiogroup" aria-label="Cómo poner la voz">
+      <button type="button" class="modo on" data-modo="audio" role="radio" aria-checked="true"><b>Ya tengo mi audio</b><small>Lo subes y monto el video sobre tu voz</small></button>
+      <button type="button" class="modo" data-modo="grabar" role="radio" aria-checked="false"><b>Escríbeme el guion</b><small>Te lo paso, lo grabas y lo subes</small></button>
+      <button type="button" class="modo" data-modo="auto" role="radio" aria-checked="false"><b>Voz automática</b><small>Para pruebas rápidas o sin grabar</small></button>
+    </div>
+    <label class="caja-subir" id="cajaAudio" style="margin-top:12px">
+      <input type="file" id="audio" accept=".mp3,.wav,.m4a,.ogg,.opus,.aac,.flac,audio/*">
+      <b id="nombreAudio">Elige tu audio</b>
+      <div class="ayuda">MP3, WAV, M4A… Escucharé lo que dices y las escenas seguirán tu ritmo.</div>
+    </label>
+
+    <h2><label for="idea" id="tituloIdea">¿Qué quieres que tenga en cuenta? (opcional)</label></h2>
+    <textarea id="idea" maxlength="3000" placeholder="Ej.: ¿Por qué Bolivia no tiene mar? Cuéntalo con un giro final sorprendente."></textarea>
+
+    <h2>Detalles</h2>
+    <div class="opciones">
+      <label class="campo" id="campoDuracion" hidden><span>Duración del guion</span>
+        <select id="duracion"><option value="30">Unos 30 segundos</option><option value="45">Unos 45 segundos</option><option value="60" selected>Unos 60 segundos</option><option value="90">Unos 90 segundos</option></select>
+      </label>
+      <label class="campo" id="campoVoz" hidden><span>Voz automática</span>
+        <select id="voz">
+          <option value="es-ES-AlvaroNeural">Álvaro (España)</option><option value="es-ES-ElviraNeural">Elvira (España)</option>
+          <option value="es-MX-JorgeNeural">Jorge (México)</option><option value="es-MX-DaliaNeural">Dalia (México)</option>
+          <option value="es-CO-GonzaloNeural">Gonzalo (Colombia)</option><option value="es-CO-SalomeNeural">Salomé (Colombia)</option>
+          <option value="es-AR-TomasNeural">Tomás (Argentina)</option><option value="es-AR-ElenaNeural">Elena (Argentina)</option>
+        </select>
+      </label>
+      <label class="campo"><span>Mapa</span>
+        <select id="mapa"><option value="mezcla">Satélite y papel antiguo</option><option value="satelite">Solo satélite</option><option value="papel">Solo papel antiguo</option></select>
+      </label>
+      <label class="campo"><span>Música</span>
+        <select id="musica"><option value="elige">Que Claude la elija</option><option value="curiosa.mp3">Curiosa</option><option value="intriga.mp3">Intriga</option><option value="epica.mp3">Épica</option><option value="">Sin música</option></select>
+      </label>
+    </div>
+    <label class="check" id="campoRevisar" hidden><input type="checkbox" id="revisar"> Enséñame el guion en el chat antes de seguir</label>
+    <div class="aviso" id="error" role="alert" hidden></div>
+    <button class="btn fuerte enviar" id="enviar">Crear mi video</button>
+  </form>
+
+  <section id="avance" hidden>
+    <h2 style="margin-top:0" id="tituloAvance">Claude está con tu video</h2>
+    <div class="turno" id="turnoVoz" hidden>
+      <h2 style="margin-top:0">Te toca: graba tu voz</h2>
+      <p class="ayuda" style="margin-bottom:10px">Léelo a tu manera: puedes cambiar palabras. Los subtítulos saldrán de lo que digas de verdad.</p>
+      <textarea id="guionVoz" rows="9" readonly aria-label="Guion para grabar"></textarea>
+      <div class="fila" style="margin:10px 0">
+        <button type="button" class="btn" id="copiarGuion">Copiar guion</button>
+      </div>
+      <label class="caja-subir" style="margin:0">
+        <input type="file" id="audioGrabado" accept=".mp3,.wav,.m4a,.ogg,.opus,.aac,.flac,audio/*">
+        <b id="textoGrabado">Subir mi audio grabado</b>
+        <div class="ayuda">Claude sigue solo en cuanto lo subas.</div>
+      </label>
+    </div>
+    <ul class="pasos" id="pasos"></ul>
+    <video id="video" controls hidden></video>
+    <div class="fila" id="acciones" hidden>
+      <a class="btn oro" id="editar" style="text-decoration:none" href="/">Retocar en el estudio</a>
+      <button class="btn" id="otro" type="button">Hacer otro</button>
+    </div>
+    <div class="nota" id="notaChat" hidden>Claude no está escuchando ahora mismo. Vuelve al chat y escribe <b>VIDEO NUEVO</b>: recogerá este pedido.</div>
+  </section>
+</div>
+<script>
+const $ = (id) => document.getElementById(id);
+const ESTILOS = [
+  ["historia", "Historia de un lugar", "Por qué un sitio es como es, de ayer a hoy", "/t/5/15/11.jpg"],
+  ["comparar", "Comparar tamaños", "Países que viajan a su tamaño real", "/t/3/2/3.jpg"],
+  ["fronteras", "Fronteras curiosas", "Enclaves e islas partidas, muy de cerca", "/t/6/31/23.jpg"],
+  ["rutas", "Rutas y viajes", "Caminos que se dibujan sobre el mapa", "/t/3/3/2.jpg"],
+  ["libre", "Tema libre", "Cualquier idea: Claude decide cómo contarla", "/datos/pergamino.jpg"],
+];
+const PASOS = ["Pedido recibido", "Comprobando los datos y escribiendo el guion", "Poniendo la voz", "Montando las escenas", "Revisando el resultado", "Creando el video", "¡Listo!"];
+let estilo = "historia", siguiendo = null, modo = "audio";
+
+$("estilos").replaceChildren(...ESTILOS.map(([id, nombre, texto, foto]) => {
+  const b = document.createElement("button");
+  b.type = "button"; b.className = "estilo" + (id === estilo ? " on" : ""); b.style.backgroundImage = `url(${foto})`;
+  b.setAttribute("aria-pressed", id === estilo);
+  const s = document.createElement("span"), t = document.createElement("b"), d = document.createElement("small");
+  t.textContent = nombre; d.textContent = texto; s.append(t, d); b.append(s);
+  b.onclick = () => {
+    estilo = id;
+    document.querySelectorAll(".estilo").forEach((x) => { x.classList.toggle("on", x === b); x.setAttribute("aria-pressed", x === b); });
+  };
+  return b;
+}));
+
+const avisar = (t) => { const e = $("error"); e.textContent = t; e.hidden = false; setTimeout(() => (e.hidden = true), 6000); };
+document.querySelectorAll(".modo").forEach((b) => (b.onclick = () => {
+  modo = b.dataset.modo;
+  document.querySelectorAll(".modo").forEach((x) => { x.classList.toggle("on", x === b); x.setAttribute("aria-checked", x === b); });
+  const conAudio = modo === "audio";
+  $("cajaAudio").hidden = !conAudio;
+  $("campoDuracion").hidden = conAudio;
+  $("campoVoz").hidden = modo !== "auto";
+  $("campoRevisar").hidden = modo !== "auto";
+  $("tituloIdea").textContent = conAudio ? "¿Qué quieres que tenga en cuenta? (opcional)" : "¿Cuál es tu idea?";
+}));
+$("audio").onchange = () => ($("nombreAudio").textContent = $("audio").files[0]?.name || "Elige tu audio");
+
+async function conexion() {
+  try {
+    const { claude } = await (await fetch("/api/conexion")).json();
+    $("conexion").classList.toggle("on", claude);
+    $("textoConexion").textContent = claude ? "Conectado con Claude" : "Claude no está esperando";
+    if (claude) $("notaChat").hidden = true;
+  } catch { $("textoConexion").textContent = "Sin conexión con el estudio"; }
+}
+conexion(); setInterval(conexion, 3000);
+
+async function subirAudio(f) {
+  const r = await fetch(`/api/pedido/audio?nombre=${encodeURIComponent(f.name)}`, { method: "POST", body: f });
+  const d = await r.json();
+  if (!r.ok) throw new Error(d.error || "No se pudo subir el audio.");
+  return d.audio;
+}
+$("copiarGuion").onclick = () => navigator.clipboard.writeText($("guionVoz").value).then(() => ($("copiarGuion").textContent = "¡Copiado!")).catch(() => $("guionVoz").select());
+$("audioGrabado").onchange = async () => {
+  const f = $("audioGrabado").files[0];
+  if (!f) return;
+  $("textoGrabado").textContent = "Subiendo…";
+  try {
+    await subirAudio(f);
+    $("textoGrabado").textContent = `Recibido: ${f.name}. Claude ya sigue.`;
+  } catch (err) {
+    $("textoGrabado").textContent = err.message || "No se pudo subir. Prueba otra vez.";
+  }
+};
+
+function pintar(p) {
+  $("turnoVoz").hidden = !p.esperaVoz;
+  if (p.esperaVoz && $("guionVoz").value !== (p.guion || "")) $("guionVoz").value = p.guion || "";
+  $("pasos").replaceChildren(...PASOS.map((texto, i) => {
+    const li = document.createElement("li");
+    li.textContent = i === 1 && p.nota ? p.nota : texto;
+    li.className = i < p.paso || p.paso === PASOS.length - 1 ? "hecho" : i === p.paso ? "ahora" : "";
+    return li;
+  }));
+  if (p.paso === PASOS.length - 1 && p.video && !$("video").src) {
+    $("tituloAvance").textContent = "¡Tu video está listo!";
+    $("video").src = `/videos/${encodeURIComponent(p.video)}?v=${Date.now()}`;
+    $("video").hidden = false; $("acciones").hidden = false;
+    $("editar").href = `/#/${encodeURIComponent(p.proyecto)}`;
+    clearInterval(siguiendo);
+  }
+}
+function seguir() {
+  $("formulario").hidden = true; $("avance").hidden = false;
+  const leer = async () => pintar(await (await fetch("/api/progreso")).json());
+  leer(); siguiendo = setInterval(leer, 1500);
+}
+$("otro").onclick = () => location.reload();
+
+$("formulario").onsubmit = async (e) => {
+  e.preventDefault();
+  $("enviar").disabled = true;
+  try {
+    let audio = "";
+    if (modo === "audio") {
+      const f = $("audio").files[0];
+      if (!f) throw new Error("Elige tu audio, o cambia a «Escríbeme el guion».");
+      audio = await subirAudio(f);
+    } else if (!$("idea").value.trim()) {
+      throw new Error("Escribe tu idea para que pueda hacer el guion.");
+    }
+    const voz = modo === "auto" ? $("voz").value : modo;
+    const cuerpo = { estilo, idea: $("idea").value, duracion: $("duracion").value, voz, mapa: $("mapa").value, musica: $("musica").value, revisar: modo === "auto" && $("revisar").checked, audio };
+    const r = await fetch("/api/pedido", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(cuerpo) });
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.error);
+    $("notaChat").hidden = d.claude;
+    seguir();
+  } catch (err) {
+    avisar(err.message || "Algo ha fallado.");
+    $("enviar").disabled = false;
+  }
+};
+</script>
+</body>
+</html>
